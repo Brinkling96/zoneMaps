@@ -33,3 +33,12 @@
 .//data_300000-elems_0-kperct_0-lperct_1seed1613423095.dat
 .//data_300000-elems_0-kperct_0-lperct_1seed1613423473.dat
 .//data_300-elems_0-kperct_0-lperct_1seed1613428554.dat
+.//data_300-elems_0-kperct_0-lperct_1seed1613502638.dat
+.//data_500000-elems_0-kperct_0-lperct_1seed1613506845.dat
+.//data_1000000-elems_5-kperct_5-lperct_1seed1613519559.dat
+.//data_1000000-elems_5-kperct_5-lperct_1seed1613570081.dat
+.//data_100-elems_0-kperct_0-lperct_1seed1613570987.dat
+.//data_100-elems_0-kperct_0-lperct_1seed1613571052.dat
+.//data_1000000-elems_5-kperct_5-lperct_1seed1613575233.dat
+.//data_1000000-elems_5-kperct_5-lperct_1seed1613575409.dat
+.//data_100-elems_0-kperct_0-lperct_1seed1613582950.dat

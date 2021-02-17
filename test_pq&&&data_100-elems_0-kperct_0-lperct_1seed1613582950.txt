@@ -1,0 +1,9 @@
+test_pq&&&data_100-elems_0-kperct_0-lperct_1seed1613582950.txt
+Test: test_pq;
+data:Number of elements{100-elems}, Noise percentage{0-kperct}, Window Threshold{0-lperct}, Seed{1seed1613582950};
+
+BEGIN
+END
+
+Time taken to perform point queries from zonemap = 163 microseconds
+Results: Hits{0}, Misses{110}

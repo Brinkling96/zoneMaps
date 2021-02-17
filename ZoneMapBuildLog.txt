@@ -1,0 +1,222 @@
+ZoneMapBuildLog
+Number of Elements{100}, Number of elements per Zone{10}, Number of Zones{10}
+
+Begin
+Begin new Zone
+0	New Element: 0
+1	New Element: 1 New Max Element!
+2	New Element: 2 New Max Element!
+3	New Element: 3 New Max Element!
+4	New Element: 4 New Max Element!
+5	New Element: 5 New Max Element!
+6	New Element: 6 New Max Element!
+7	New Element: 7 New Max Element!
+8	New Element: 8 New Max Element!
+9	New Element: 9 New Max Element!
+End of Zone: Min{0}, Max{9}, Size{10}
+
+Begin new Zone
+10	New Element: 10
+11	New Element: 11 New Max Element!
+12	New Element: 12 New Max Element!
+13	New Element: 13 New Max Element!
+14	New Element: 14 New Max Element!
+15	New Element: 15 New Max Element!
+16	New Element: 16 New Max Element!
+17	New Element: 17 New Max Element!
+18	New Element: 18 New Max Element!
+19	New Element: 19 New Max Element!
+End of Zone: Min{10}, Max{19}, Size{10}
+
+Begin new Zone
+20	New Element: 20
+21	New Element: 21 New Max Element!
+22	New Element: 22 New Max Element!
+23	New Element: 23 New Max Element!
+24	New Element: 24 New Max Element!
+25	New Element: 25 New Max Element!
+26	New Element: 26 New Max Element!
+27	New Element: 27 New Max Element!
+28	New Element: 28 New Max Element!
+29	New Element: 29 New Max Element!
+End of Zone: Min{20}, Max{29}, Size{10}
+
+Begin new Zone
+30	New Element: 30
+31	New Element: 31 New Max Element!
+32	New Element: 32 New Max Element!
+33	New Element: 33 New Max Element!
+34	New Element: 34 New Max Element!
+35	New Element: 35 New Max Element!
+36	New Element: 36 New Max Element!
+37	New Element: 37 New Max Element!
+38	New Element: 38 New Max Element!
+39	New Element: 39 New Max Element!
+End of Zone: Min{30}, Max{39}, Size{10}
+
+Begin new Zone
+40	New Element: 40
+41	New Element: 41 New Max Element!
+42	New Element: 42 New Max Element!
+43	New Element: 43 New Max Element!
+44	New Element: 44 New Max Element!
+45	New Element: 45 New Max Element!
+46	New Element: 46 New Max Element!
+47	New Element: 47 New Max Element!
+48	New Element: 48 New Max Element!
+49	New Element: 49 New Max Element!
+End of Zone: Min{40}, Max{49}, Size{10}
+
+Begin new Zone
+50	New Element: 50
+51	New Element: 51 New Max Element!
+52	New Element: 52 New Max Element!
+53	New Element: 53 New Max Element!
+54	New Element: 54 New Max Element!
+55	New Element: 55 New Max Element!
+56	New Element: 56 New Max Element!
+57	New Element: 57 New Max Element!
+58	New Element: 58 New Max Element!
+59	New Element: 59 New Max Element!
+End of Zone: Min{50}, Max{59}, Size{10}
+
+Begin new Zone
+60	New Element: 60
+61	New Element: 61 New Max Element!
+62	New Element: 62 New Max Element!
+63	New Element: 63 New Max Element!
+64	New Element: 64 New Max Element!
+65	New Element: 65 New Max Element!
+66	New Element: 66 New Max Element!
+67	New Element: 67 New Max Element!
+68	New Element: 68 New Max Element!
+69	New Element: 69 New Max Element!
+End of Zone: Min{60}, Max{69}, Size{10}
+
+Begin new Zone
+70	New Element: 70
+71	New Element: 71 New Max Element!
+72	New Element: 72 New Max Element!
+73	New Element: 73 New Max Element!
+74	New Element: 74 New Max Element!
+75	New Element: 75 New Max Element!
+76	New Element: 76 New Max Element!
+77	New Element: 77 New Max Element!
+78	New Element: 78 New Max Element!
+79	New Element: 79 New Max Element!
+End of Zone: Min{70}, Max{79}, Size{10}
+
+Begin new Zone
+80	New Element: 80
+81	New Element: 81 New Max Element!
+82	New Element: 82 New Max Element!
+83	New Element: 83 New Max Element!
+84	New Element: 84 New Max Element!
+85	New Element: 85 New Max Element!
+86	New Element: 86 New Max Element!
+87	New Element: 87 New Max Element!
+88	New Element: 88 New Max Element!
+89	New Element: 89 New Max Element!
+End of Zone: Min{80}, Max{89}, Size{10}
+
+Begin new Zone
+90	New Element: 90
+91	New Element: 91 New Max Element!
+92	New Element: 92 New Max Element!
+93	New Element: 93 New Max Element!
+94	New Element: 94 New Max Element!
+95	New Element: 95 New Max Element!
+96	New Element: 96 New Max Element!
+97	New Element: 97 New Max Element!
+98	New Element: 98 New Max Element!
+99	New Element: 99 New Max Element!
+End of Zone: Min{90}, Max{99}, Size{10}
+
+
+ZONE ORDER
+Zone: Min{0}, Max{9}, Size{10}
+Zone: Min{10}, Max{19}, Size{10}
+Zone: Min{20}, Max{29}, Size{10}
+Zone: Min{30}, Max{39}, Size{10}
+Zone: Min{40}, Max{49}, Size{10}
+Zone: Min{50}, Max{59}, Size{10}
+Zone: Min{60}, Max{69}, Size{10}
+Zone: Min{70}, Max{79}, Size{10}
+Zone: Min{80}, Max{89}, Size{10}
+Zone: Min{90}, Max{99}, Size{10}
+
+BUILDING ZONE TREE
+Input Zone: Min{0}, Max{9}
+Input Zone: Min{10}, Max{19}
+
+Test Zone: Min{0}, Max{19}
+Sub Zone: Num{0}, Min{0}, Max{9}
+Sub Zone: Num{1}, Min{10}, Max{19}
+
+Input Zone: Min{20}, Max{29}
+Input Zone: Min{30}, Max{39}
+
+Test Zone: Min{20}, Max{39}
+Sub Zone: Num{0}, Min{20}, Max{29}
+Sub Zone: Num{1}, Min{30}, Max{39}
+
+Input Zone: Min{40}, Max{49}
+Input Zone: Min{50}, Max{59}
+
+Test Zone: Min{40}, Max{59}
+Sub Zone: Num{0}, Min{40}, Max{49}
+Sub Zone: Num{1}, Min{50}, Max{59}
+
+Input Zone: Min{60}, Max{69}
+Input Zone: Min{70}, Max{79}
+
+Test Zone: Min{60}, Max{79}
+Sub Zone: Num{0}, Min{60}, Max{69}
+Sub Zone: Num{1}, Min{70}, Max{79}
+
+Input Zone: Min{80}, Max{89}
+Input Zone: Min{90}, Max{99}
+
+Test Zone: Min{80}, Max{99}
+Sub Zone: Num{0}, Min{80}, Max{89}
+Sub Zone: Num{1}, Min{90}, Max{99}
+
+Input Zone: Min{0}, Max{19}
+Input Zone: Min{20}, Max{39}
+
+Test Zone: Min{0}, Max{39}
+Sub Zone: Num{0}, Min{0}, Max{19}
+Sub Zone: Num{1}, Min{20}, Max{39}
+
+Input Zone: Min{40}, Max{59}
+Input Zone: Min{60}, Max{79}
+
+Test Zone: Min{40}, Max{79}
+Sub Zone: Num{0}, Min{40}, Max{59}
+Sub Zone: Num{1}, Min{60}, Max{79}
+
+Input Zone: Min{80}, Max{99}
+
+Test Zone: Min{80}, Max{99}
+Sub Zone: Num{0}, Min{80}, Max{99}
+
+Input Zone: Min{0}, Max{39}
+Input Zone: Min{40}, Max{79}
+
+Test Zone: Min{0}, Max{79}
+Sub Zone: Num{0}, Min{0}, Max{39}
+Sub Zone: Num{1}, Min{40}, Max{79}
+
+Input Zone: Min{80}, Max{99}
+
+Test Zone: Min{80}, Max{99}
+Sub Zone: Num{0}, Min{80}, Max{99}
+
+Input Zone: Min{0}, Max{79}
+Input Zone: Min{80}, Max{99}
+
+Test Zone: Min{0}, Max{99}
+Sub Zone: Num{0}, Min{0}, Max{79}
+Sub Zone: Num{1}, Min{80}, Max{99}
+
+Total Height: 4

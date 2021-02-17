@@ -40,14 +40,19 @@ std::vector<int> generatePointQueries(std::vector<int> data, int n)
 
 int main(int argc, char **argv)
 {
-  if (argc < 3)
+  if (argc < 4)
   {
-    std::cout << "Usage: ./main <input_file> <test_case>" << std::endl;
+    std::cout << "Usage: ./main <input_file> <test_case> <Log Bool, 1 or 0>" << std::endl;
     return 0;
   }
 
+
   std::string input_file = argv[1];
   std::string test_case = argv[2];
+  std::string log_bool_string = argv[3];
+
+//Indicates whether or not to extensive logging
+  bool log = std::stoi(log_bool_string) == 1;
 
   if (test_case != "test_pq" && test_case != "test_rq_1" && test_case != "test_rq_2" && test_case != "test_rq_3" && test_case != "test_rq_4")
   {
@@ -68,121 +73,226 @@ int main(int argc, char **argv)
   data.resize(filesize / sizeof(int));
   ifs.read((char *)data.data(), filesize);
 
+
+  //Setting custom number of elements per zone
+  int num_ele_per_zone = 100;
+  if (data.size()< 100 ){
+    num_ele_per_zone = 2;
+  }
+
   //1. ----------------------------- initialize zonemap and build -----------------------------
   //build zonemap
-  zonemap<int> zoneMap(data, (uint)data.size() / 100); //I make zonemap here
+  if(log){
+    //ELSE WILL NOT HAVE COMMENTS
+    zonemap<int> zoneMap(true,data, num_ele_per_zone); //I make zonemap here
 
-  ofstream file;
-  string fileName = test_case +"&&&"+input_file.substr(2,input_file.length()-6)+".txt";
-  file.open(fileName);
-  addHeaderToLog(&file, fileName,input_file,test_case);
-
-
-  if (test_case == "test_pq")
-  {
-
-    //2. ----------------------------- point queries -----------------------------
-    std::vector<int> queries = generatePointQueries(data, data.size());
+    ofstream file;
+    string fileName = test_case +"&&&"+input_file.substr(2,input_file.length()-6)+".txt";
+    file.open(fileName);
+    addHeaderToLog(&file, fileName,input_file,test_case);
 
 
+    if (test_case == "test_pq")
+    {
 
+      //2. ----------------------------- point queries -----------------------------
+      std::vector<int> queries = generatePointQueries(data, data.size());
 
-    /*
-    std::cout<< "Workload size: " << queries.size()<<std::endl;
-    for(int i =0; i < queries.size(); i++){
-      std::cout<< "Test: " << queries.at(i)<<std::endl;
-    }
-    */
-    auto start = std::chrono::high_resolution_clock::now();
-    unsigned long long i =1;
-    unsigned long long misses = 0;
-    unsigned long long hits = 0;
-    for(int query: queries){
-      //file << "BEGIN QUERY " << i << " Element{" << query<< "}" <<endl;
-      bool result = zoneMap.query(&file,query);
-      if (result){
-        //file << i << "\tQuery:" << query << ", Found!"<<endl;
-        hits++;
-      }else{
-        //file << i << "\tQuery:" << query << ", Not Found!"<<endl;
-        misses++;
+      auto start = std::chrono::high_resolution_clock::now();
+      unsigned long long i =1;
+      unsigned long long misses = 0;
+      unsigned long long hits = 0;
+      for(int query: queries){
+        bool result = zoneMap.query(&file,query);
+        if (result){
+          file << "FOUND" <<std::endl;
+          hits++;
+        }else{
+          file << "NOT FOUND" <<std::endl;
+          misses++;
+        }
+        //This helps me track how fast my code in running while running
+        std::cout<<i++<<std::endl;
       }
-      std::cout<<i++<<std::endl;
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long point_query_time = duration.count();
+      file << "Time taken to perform point queries from zonemap = " << point_query_time << " microseconds" << endl
+      << "Results: Hits{" << hits <<"}, " <<"Misses{" <<misses << "}" << endl;
     }
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    file<<"END" <<endl<<endl;
-    unsigned long long point_query_time = duration.count();
-    file << "Time taken to perform point queries from zonemap = " << point_query_time << " microseconds" << endl
-    << "Results: Hits{" << hits <<"}, " <<"Misses{" <<misses << "}" << endl;
-  }
-  else if (test_case == "test_rq_1")
-  {
-    //3. ----------------------------- range queries -----------------------------
+    else if (test_case == "test_rq_1")
+    {
+      //3. ----------------------------- range queries -----------------------------
 
-    auto start = std::chrono::high_resolution_clock::now();
-    // range query from zonemaps here
-    int n = data.size();
-    int low = ((int)n* 0.1);
-    int high = ((int)n* 0.2);
-    vector<int> results = zoneMap.query(&file,low,high);
+      auto start = std::chrono::high_resolution_clock::now();
+      // RQ 1: 10 percent to 20 percent
+      int n = data.size();
+      int low = ((int)n* 0.1);
+      int high = ((int)n* 0.2);
+      vector<int> results = zoneMap.query(&file,low,high);
 
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    file<<"END" <<endl<<endl;
-    unsigned long long range_query_time = duration.count();
-    file << "Time taken to perform range query 1 from zonemap = " << range_query_time << " microseconds" << endl<<
-    "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
-  }
-  else if (test_case == "test_rq_2")
-  {
-    //3. ----------------------------- range queries -----------------------------
-    auto start = std::chrono::high_resolution_clock::now();
-    // range query from zonemaps here
-    int n = data.size();
-    int low = ((int)n* 0.3);
-    int high = ((int)n* 0.4);
-    vector<int> results = zoneMap.query(&file,low,high);
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 1 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    else if (test_case == "test_rq_2")
+    {
+      //3. ----------------------------- range queries -----------------------------
+      auto start = std::chrono::high_resolution_clock::now();
+      // RQ 2: 30 percent to 40 percent
+      int n = data.size();
+      int low = ((int)n* 0.3);
+      int high = ((int)n* 0.4);
+      vector<int> results = zoneMap.query(&file,low,high);
 
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    file<<"END" <<endl<<endl;
-    unsigned long long range_query_time = duration.count();
-    file << "Time taken to perform range query 2 from zonemap = " << range_query_time << " microseconds" << endl<<
-    "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 2 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    else if (test_case == "test_rq_3")
+    {
+      //3. ----------------------------- range queries -----------------------------
+      auto start = std::chrono::high_resolution_clock::now();
+      // RQ 3: 60 percent to 70 percent
+      int n = data.size();
+      int low = ((int)n* 0.6);
+      int high = ((int)n* 0.7);
+      vector<int> results = zoneMap.query(&file,low,high);
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 3 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    else if (test_case == "test_rq_4")
+    {
+      //3. ----------------------------- range queries -----------------------------
+      auto start = std::chrono::high_resolution_clock::now();
+      // RQ 2: 80 percent to 90 percent
+      int n = data.size();
+      int low = ((int)n* 0.8);
+      int high = ((int)n* 0.9);
+      vector<int> results = zoneMap.query(&file,low,high);
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 4 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    file.close();
+  } else{
+    zonemap<int> zoneMap(false,data, num_ele_per_zone); //I make zonemap here
+
+    ofstream file;
+    string fileName = test_case +"&&&"+input_file.substr(2,input_file.length()-6)+".txt";
+    file.open(fileName);
+    addHeaderToLog(&file, fileName,input_file,test_case);
+
+
+    if (test_case == "test_pq")
+    {
+
+      //2. ----------------------------- point queries -----------------------------
+      std::vector<int> queries = generatePointQueries(data, data.size());
+
+      auto start = std::chrono::high_resolution_clock::now();
+      unsigned long long i =1;
+      unsigned long long misses = 0;
+      unsigned long long hits = 0;
+      for(int query: queries){
+        bool result = zoneMap.query(query);
+        if (result){
+          hits++;
+        }else{
+          misses++;
+        }
+        std::cout<<i++<<std::endl;
+      }
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long point_query_time = duration.count();
+      file << "Time taken to perform point queries from zonemap = " << point_query_time << " microseconds" << endl
+      << "Results: Hits{" << hits <<"}, " <<"Misses{" <<misses << "}" << endl;
+    }
+    else if (test_case == "test_rq_1")
+    {
+      //3. ----------------------------- range queries -----------------------------
+
+      auto start = std::chrono::high_resolution_clock::now();
+      // range query from zonemaps here
+      int n = data.size();
+      int low = ((int)n* 0.1);
+      int high = ((int)n* 0.2);
+      vector<int> results = zoneMap.query(low,high);
+
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 1 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    else if (test_case == "test_rq_2")
+    {
+      //3. ----------------------------- range queries -----------------------------
+      auto start = std::chrono::high_resolution_clock::now();
+      // range query from zonemaps here
+      int n = data.size();
+      int low = ((int)n* 0.3);
+      int high = ((int)n* 0.4);
+      vector<int> results = zoneMap.query(low,high);
+
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 2 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    else if (test_case == "test_rq_3")
+    {
+      //3. ----------------------------- range queries -----------------------------
+      auto start = std::chrono::high_resolution_clock::now();
+      // range query from zonemaps here
+      int n = data.size();
+      int low = ((int)n* 0.6);
+      int high = ((int)n* 0.7);
+      vector<int> results = zoneMap.query(low,high);
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 3 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    else if (test_case == "test_rq_4")
+    {
+      //3. ----------------------------- range queries -----------------------------
+      auto start = std::chrono::high_resolution_clock::now();
+      // range query from zonemaps here
+      int n = data.size();
+      int low = ((int)n* 0.8);
+      int high = ((int)n* 0.9);
+      vector<int> results = zoneMap.query(low,high);
+      auto stop = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+      file<<"END" <<endl<<endl;
+      unsigned long long range_query_time = duration.count();
+      file << "Time taken to perform range query 4 from zonemap = " << range_query_time << " microseconds" << endl<<
+      "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
+    }
+    file.close();
   }
-  else if (test_case == "test_rq_3")
-  {
-    //3. ----------------------------- range queries -----------------------------
-    auto start = std::chrono::high_resolution_clock::now();
-    // range query from zonemaps here
-    int n = data.size();
-    int low = ((int)n* 0.6);
-    int high = ((int)n* 0.7);
-    vector<int> results = zoneMap.query(&file,low,high);
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    file<<"END" <<endl<<endl;
-    unsigned long long range_query_time = duration.count();
-    file << "Time taken to perform range query 3 from zonemap = " << range_query_time << " microseconds" << endl<<
-    "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
-  }
-  else if (test_case == "test_rq_4")
-  {
-    //3. ----------------------------- range queries -----------------------------
-    auto start = std::chrono::high_resolution_clock::now();
-    // range query from zonemaps here
-    int n = data.size();
-    int low = ((int)n* 0.8);
-    int high = ((int)n* 0.9);
-    vector<int> results = zoneMap.query(&file,low,high);
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    file<<"END" <<endl<<endl;
-    unsigned long long range_query_time = duration.count();
-    file << "Time taken to perform range query 4 from zonemap = " << range_query_time << " microseconds" << endl<<
-    "Results: Size{" << results.size() <<"}, ExpectedSize{"<< ((int)n* 0.1)<< "}" << endl;
-  }
-  file.close();
+  
   return 0;
 }

@@ -14,6 +14,7 @@ struct zone
     T min;                   // minimum element in the zone
     T max;                   // maximum element in the zone
     uint size;               // no. of elements in current zone
+    int height;
 };
 
 template <typename T>
@@ -31,7 +32,7 @@ public:
      * returns: N/A 
      */
     
-    zonemap(std::vector<T> _elements, uint _num_elements_per_zone);
+    zonemap(bool log, std::vector<T> _elements, uint _num_elements_per_zone);
 
     /**
      * Purpose: builds the zone using the elements array/list. Maintains invariant that no. of elements in every zone
@@ -41,6 +42,10 @@ public:
      */
     std::vector<zone<T> > buildSortedLeafVector(std::ofstream* log, std::vector<T>* elements, uint num_elements_per_zone);
 
+    //Overloaded to exclude logging
+    std::vector<zone<T> > buildSortedLeafVector(std::vector<T>* elements, uint num_elements_per_zone);
+
+
     /**
      * Purpose: builds the zoneTree using the LeafVector of leaf Zones. Maintains invariant that no. of ones in each Zone
      *          is less than or equal to num_elements_per_zone 
@@ -48,6 +53,9 @@ public:
      * Returns:RootZone
      */
     zone<T>  buildZoneTree(std::ofstream* log, std::vector<zone<T> >* leafVector, uint num_elements_per_zone);
+
+    //Overloaded to exclude logging
+    zone<T> buildZoneTree(std::vector<zone<T> >* leafVector, uint num_ele);
 
     /**
      * Purpose: sorts the elements in the vector/list/array. 
@@ -63,12 +71,16 @@ public:
      */
     bool query(std::ofstream* log, T key);
 
+    bool query(T key);
+
     /**
      * Purpose: Helper to query; handling recursion
      * Param: log file to write to, key to be found, current zone;
      * return True if element is found
      */
     bool subquery(std::ofstream* log, T key, zone<T>* currZone);
+
+    bool subquery(T key, zone<T>* currZone);
     
     /**
      * Purpose: Query a range of keys using the zonemap that are between a lower and higher limit
@@ -76,6 +88,8 @@ public:
      * returns: list of elements found using the query 
      */
     std::vector<T> query(std::ofstream* log, T low, T high);
+    
+    std::vector<T> query(T low, T high);
 
     /**
      * Purpose: Helper to query; handling recursion
@@ -83,6 +97,8 @@ public:
      * return vector of elements in range
      */
     std::vector<T> subquery(std::ofstream* log, T low, T high, zone<T>* currZone);
+
+    std::vector<T> subquery( T low, T high, zone<T>* currZone);
 
 };
 #endif
